@@ -22,11 +22,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # 3. Build with Maven (skip tests for speed, or remove -DskipTests to run tests)
-      - name: Run Unit & Integration Tests
+      # 3. Run tests with JaCoCo coverage
+      - name: Run Tests & Generate JaCoCo Report
         run: |
           chmod +x mvnw
           ./mvnw clean test verify
+
+      # 4. Upload JaCoCo coverage report as an artifact
+      - name: Upload JaCoCo Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
 
       # 4. Log in to Docker Hub (store DOCKERHUB_USERNAME & DOCKERHUB_PASSWORD as GitHub secrets)
       - name: Log in to Docker Hub
